@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=Cygwin_4.x-Windows
 CND_ARTIFACT_DIR_Debug=dist/Debug/Cygwin_4.x-Windows
-CND_ARTIFACT_NAME_Debug=sereticase
-CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin_4.x-Windows/sereticase
+CND_ARTIFACT_NAME_Debug=project
+CND_ARTIFACT_PATH_Debug=dist/Debug/Cygwin_4.x-Windows/project
 CND_PACKAGE_DIR_Debug=dist/Debug/Cygwin_4.x-Windows/package
-CND_PACKAGE_NAME_Debug=sereticase.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin_4.x-Windows/package/sereticase.tar
+CND_PACKAGE_NAME_Debug=project.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/Cygwin_4.x-Windows/package/project.tar
 # Release configuration
 CND_PLATFORM_Release=Cygwin_4.x-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/Cygwin_4.x-Windows
-CND_ARTIFACT_NAME_Release=sereticase
-CND_ARTIFACT_PATH_Release=dist/Release/Cygwin_4.x-Windows/sereticase
+CND_ARTIFACT_NAME_Release=project
+CND_ARTIFACT_PATH_Release=dist/Release/Cygwin_4.x-Windows/project
 CND_PACKAGE_DIR_Release=dist/Release/Cygwin_4.x-Windows/package
-CND_PACKAGE_NAME_Release=sereticase.tar
-CND_PACKAGE_PATH_Release=dist/Release/Cygwin_4.x-Windows/package/sereticase.tar
+CND_PACKAGE_NAME_Release=project.tar
+CND_PACKAGE_PATH_Release=dist/Release/Cygwin_4.x-Windows/package/project.tar
 #
 # include compiler specific variables
 #
