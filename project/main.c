@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
 
     
     printf("commit test");
+    printf("commit test 2");
     
     
     return (EXIT_SUCCESS);
