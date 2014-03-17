@@ -15,6 +15,10 @@
  */
 int main(int argc, char** argv) {
     
+    Rijbaan *R1;
+    Rijbaan_Construct(&R1, 1, 2, 1, 2);
+    Rijbaan_Print(R1);
+    
     return (EXIT_SUCCESS);
 }
 

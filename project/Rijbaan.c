@@ -1,13 +1,17 @@
 
 #include <stdlib.h>
+#include <stdio.h>
 #include "Stoplicht.h"
 #include "Rijbaan.h"
 
-void Rijbaan_Construct(Rijbaan** ptrRijbaan, int SLrr_ID, int SLl_ID, int Sensor_ID1, int Sensor_ID2){
-    (*ptrRijbaan)=(Rijbaan*)malloc(sizeof(Rijbaan));
+void Rijbaan_Construct(Rijbaan** dptrRijbaan, int SLrr_ID, int SLl_ID, int Sensor_ID1, int Sensor_ID2){
+    (*dptrRijbaan)=(Rijbaan*)malloc(sizeof(Rijbaan));
     
-    (*ptrRijbaan)->ptrSLrr->ID = SLrr_ID;
-    (*ptrRijbaan)->ptrSLrr->HuidigeStatus = STOPLICHT_ROOD;
-    (*ptrRijbaan)->ptrSLl->ID = SLl_ID;
-    (*ptrRijbaan)->ptrSLl->HuidigeStatus = STOPLICHT_ROOD;       
+    Stoplicht_Construct(&((*dptrRijbaan)->ptrSLl), SLl_ID, STOPLICHT_ROOD);
+    Stoplicht_Construct(&((*dptrRijbaan)->ptrSLrr), SLrr_ID, STOPLICHT_ROOD);
+}
+
+void Rijbaan_Print(Rijbaan* ptrRijbaan){
+    printf("Rijbaan %i aangemaakt en stoplicht %i (%i) en %i (%i)\n", 1, ptrRijbaan->ptrSLrr->ID, ptrRijbaan->ptrSLrr->HuidigeStatus, ptrRijbaan->ptrSLl->ID, ptrRijbaan->ptrSLl->HuidigeStatus );
+    
 }
