@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/Counter.o \
+	${OBJECTDIR}/Kruispunt.o \
 	${OBJECTDIR}/Rijbaan.o \
 	${OBJECTDIR}/Sensor.o \
 	${OBJECTDIR}/Stoplicht.o \
@@ -71,6 +72,11 @@ ${OBJECTDIR}/Counter.o: Counter.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Counter.o Counter.c
+
+${OBJECTDIR}/Kruispunt.o: Kruispunt.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Kruispunt.o Kruispunt.c
 
 ${OBJECTDIR}/Rijbaan.o: Rijbaan.c 
 	${MKDIR} -p ${OBJECTDIR}
