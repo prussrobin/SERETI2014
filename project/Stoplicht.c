@@ -17,7 +17,6 @@ void Stoplicht_Set_State(Stoplicht *obj, int state){
             break;
         default:
             //TODO handle invalid arg
-            obj->HuidigeStatus = STOPLICHT_ROOD;
             break;
     }
 }

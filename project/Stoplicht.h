@@ -11,8 +11,6 @@
 typedef struct{
     int ID;
     int HuidigeStatus;
-    Sensor InSensor;
-    Sensor UitSensor;
 }Stoplicht;
 
 #define STOPLICHT_GROEN 1

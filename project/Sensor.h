@@ -8,15 +8,16 @@
 #ifndef SENSOR_H
 #define	SENSOR_H
 
-typedef struct{
-    int ID; 
-    int InOfUitSensor; //0 voor in, 1 voor uit
-    int StoplichtID;
-    int State;
-}Sensor;
+#ifdef	__cplusplus
+extern "C" {
+#endif
 
-void event_AutoOp_Sensor(Kruispunt* v,KruispuntEvent e);
-void event_AutoAf_Sensor(Kruispunt* v,KruispuntEvent e);
+
+
+
+#ifdef	__cplusplus
+}
+#endif
 
 #endif	/* SENSOR_H */
 

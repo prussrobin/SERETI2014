@@ -37,8 +37,8 @@ typedef enum {
     EventSet2Groen,
     EventSet3Groen,
     EventSet4Groen,
-    EventGroenNaarOranje,
-    EventOranjeNaarRood
+    EventOranje,
+    EventRood
 } KruispuntEvent;
 
 
