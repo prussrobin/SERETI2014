@@ -170,9 +170,6 @@ static void construct_kruispuntSTD() {
 }
 
 
-
-
-
 void create_Kruispunt(Kruispunt **dptrKruispunt) {
     construct_kruispuntSTD();
     
