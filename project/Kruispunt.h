@@ -16,15 +16,15 @@
 #include "Stoplicht.h"
 
 
-#define KRUISPUNT_AANTAL_TOESTANDEN 6
+#define KRUISPUNT_AANTAL_TOESTANDEN 5
+#define GEEN_SET -1
 
 
 typedef enum {
     StatusAllesRood,
-    StatusSet1Groen,
-    StatusSet2Groen,
-    StatusSet3Groen,
-    StatusSet4Groen,
+    StatusActieveSetGroen,
+    StatusActieveSetOranje,
+    StatusNoodStopOranje,
     StatusNoodStop
 } KruispuntStatus;
 
@@ -33,11 +33,12 @@ typedef enum {
 typedef enum {
     EventNoodStopAan,
     EventNoodStopUit,
-    EventTijdOp,
     EventSet1Groen,
     EventSet2Groen,
     EventSet3Groen,
-    EventSet4Groen
+    EventSet4Groen,
+    EventGroenNaarOranje,
+    EventOranjeNaarRood
 } KruispuntEvent;
 
 
@@ -48,12 +49,20 @@ typedef struct {
     Rijbaan *ptrR3;
     Rijbaan *ptrR4;
     KruispuntStatus status;
-    task *ptrKruispuntController;
-    mailBox mailForKruispunt;
+    int actieveSet;
+    
+    int illegalEvents;
+    task *ptrTask;
+    mailBox mailbox;
 } Kruispunt;
 
 
-void create_Kruispunt(Kruispunt **dptrKruispunt);
+void Kruispunt_Construct(Kruispunt **dptrKruispunt);
+void Kruispunt_SendEvent(Kruispunt* ptrKruispunt,KruispuntEvent e);
+void Kruispunt_PrintAll(Kruispunt *ptrKruispunt);
+void Kruispunt_PrintState(Kruispunt *ptrKruispunt);
+void Kruispunt_PrintEventLabelInline(KruispuntEvent e);
+void Kruispunt_PrintStatusLabelInline(KruispuntStatus e);
 
 #endif	/* KRUISPUNT_H */
 
