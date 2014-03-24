@@ -48,12 +48,14 @@ typedef struct {
     Rijbaan *ptrR2;
     Rijbaan *ptrR3;
     Rijbaan *ptrR4;
-    KruispuntStatus status;
+    KruispuntStatus kruispuntStatus;
     int actieveSet;
     
     int illegalEvents;
     task *ptrTask;
     mailBox mailbox;
+    
+    int intTest;
 } Kruispunt;
 
 

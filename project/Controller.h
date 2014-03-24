@@ -14,6 +14,7 @@
 typedef struct {
     Kruispunt *ptrKruispunt;
     task *ptrTask;
+    int intTest;
 } Controller;
 
 

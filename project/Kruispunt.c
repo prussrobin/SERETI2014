@@ -87,23 +87,6 @@ static void actionOranjeNaarNoodStopOranje(void *obj) {
 
 
 
-static void actionGroenNaarNoodStop(void *obj) {
-    Kruispunt *ptrKruispunt=(Kruispunt*)obj;
-    if (KRUISPUNT_DEBUG) {
-        printf("Kruispunt.c:actionGroenNaarNoodStop: \n");
-    }
-    ptrKruispunt->actieveSet=GEEN_SET;
-}
-
-static void actionOranjeNaarNoodStop(void *obj) {
-    Kruispunt *ptrKruispunt=(Kruispunt*)obj;
-    if (KRUISPUNT_DEBUG) {
-        printf("Kruispunt.c:actionOranjeNaarNoodStop: \n");
-    }
-    ptrKruispunt->actieveSet=GEEN_SET;
-}
-
-
 
 static void actionNoodStopOranjeNaarNoodStop(void *obj) {
     Kruispunt *ptrKruispunt=(Kruispunt*)obj;
@@ -134,7 +117,8 @@ static void actionVervolgRegulier(void *obj) {
 static void defaultAction(void *obj) {
     Kruispunt *ptrKruispunt=(Kruispunt*)obj;
     if (KRUISPUNT_DEBUG) {
-        printf("Kruispunt.c:defaultAction: \n");
+        printf("Kruispunt.c:defaultAction: ");
+        Kruispunt_PrintState(ptrKruispunt);
     }
     ptrKruispunt->illegalEvents++;
 }
@@ -153,109 +137,25 @@ static void construct_kruispuntSTD() {
                 defaultAction);
         
         
-        /*
-         * AllesRood -> ActieveSetGroen
-         */
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusAllesRood, 
-                EventSet1Groen, 
-                StatusActieveSetGroen, 
-                actionSet1Groen);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusAllesRood, 
-                EventSet2Groen, 
-                StatusActieveSetGroen, 
-                actionSet2Groen);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusAllesRood, 
-                EventSet3Groen, 
-                StatusActieveSetGroen, 
-                actionSet3Groen);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusAllesRood, 
-                EventSet4Groen, 
-                StatusActieveSetGroen, 
-                actionSet4Groen);
-        
-        /*
-         * ActieveSetGroen -> {ActieveSetOranje, NoodStop}
-         */
-        
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusActieveSetGroen, 
-                EventOranje, 
-                StatusActieveSetOranje, 
-                actionGroenNaarOranje);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusActieveSetGroen, 
-                EventNoodStopAan, 
-                StatusNoodStopOranje, 
-                actionGroenNaarNoodStopOranje);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusActieveSetGroen, 
-                EventNoodStopAan, 
-                StatusNoodStop, 
-                actionGroenNaarNoodStop);
-        
-        
-        /*
-         * ActieveSetOranje -> {AllesRood, NoodStop}
-         */
-        
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusActieveSetOranje, 
-                EventRood, 
-                StatusAllesRood, 
-                actionOranjeNaarRood);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusActieveSetOranje, 
-                EventNoodStopAan, 
-                StatusNoodStopOranje, 
-                actionOranjeNaarNoodStopOranje);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusActieveSetOranje, 
-                EventNoodStopAan, 
-                StatusNoodStop, 
-                actionOranjeNaarNoodStop);
-        
-        
-        /*
-         * AllesRood <-> NoodStop 
-         */
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusAllesRood, 
-                EventNoodStopAan, 
-                StatusNoodStop, 
-                actionRoodNaarNoodStop);
-        
-        addTransition_STD(
-                kruispuntSTD, 
-                StatusNoodStop, 
-                EventNoodStopUit, 
-                StatusAllesRood, 
-                actionVervolgRegulier);
+        //AllesRood -> ActieveSetGroen
+        addTransition_STD(kruispuntSTD, StatusAllesRood, EventSet1Groen, StatusActieveSetGroen, actionSet1Groen);
+        addTransition_STD(kruispuntSTD, StatusAllesRood, EventSet2Groen, StatusActieveSetGroen, actionSet2Groen);
+        addTransition_STD(kruispuntSTD, StatusAllesRood, EventSet3Groen, StatusActieveSetGroen, actionSet3Groen);
+        addTransition_STD(kruispuntSTD, StatusAllesRood, EventSet4Groen, StatusActieveSetGroen, actionSet4Groen);
+        //AllesRood -> NoodStop
+        addTransition_STD(kruispuntSTD, StatusAllesRood, EventNoodStopAan, StatusNoodStop, actionRoodNaarNoodStop);
+        //NoodStop -> AllesRood
+        addTransition_STD(kruispuntSTD, StatusNoodStop, EventNoodStopUit, StatusAllesRood, actionVervolgRegulier);
+        //ActieveSetGroen -> ActieveSetOranje
+        addTransition_STD(kruispuntSTD, StatusActieveSetGroen, EventOranje, StatusActieveSetOranje, actionGroenNaarOranje);
+        //ActieveSetGroen -> NoodStopOranje
+        addTransition_STD(kruispuntSTD, StatusActieveSetGroen, EventNoodStopAan, StatusNoodStopOranje, actionGroenNaarNoodStopOranje);
+        //ActieveSetOranje -> AllesRood
+        addTransition_STD(kruispuntSTD, StatusActieveSetOranje, EventRood, StatusAllesRood, actionOranjeNaarRood);
+        //ActieveSetOranje -> NoodStopOranje
+        addTransition_STD(kruispuntSTD, StatusActieveSetOranje, EventNoodStopAan, StatusNoodStopOranje, actionOranjeNaarNoodStopOranje);
+        //NoodStopOranje -> NoodStop
+        addTransition_STD(kruispuntSTD, StatusNoodStopOranje, EventRood, StatusNoodStop, actionNoodStopOranjeNaarNoodStop);
         
     }
 }
@@ -283,7 +183,7 @@ static unsigned __stdcall Kruispunt_Task(void* arg){
             //Zoek de status op en voer de juiste actie uit.
 
             //<NIEUWE TOESTAND> = lookUp_STD(<VERWIJZING NAAR STD>, <HUIDIGE TOESTAND>, <GEBEURTENIS>, <WELKE ACTIE?>)
-            ptrKruispunt->status = (KruispuntStatus)lookUp_STD(kruispuntSTD,ptrKruispunt->status,e,&a);
+            ptrKruispunt->kruispuntStatus = (KruispuntStatus)lookUp_STD(kruispuntSTD,ptrKruispunt->kruispuntStatus,e,&a);
             
             //Voer actie uit
             a(ptrKruispunt);
@@ -309,7 +209,7 @@ void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
     (*dptrKruispunt)=(Kruispunt*)malloc(sizeof(Kruispunt));
     
     // Initieele status
-    (*dptrKruispunt)->status=StatusAllesRood;
+    (*dptrKruispunt)->kruispuntStatus=StatusAllesRood;
     
     // Rijbanen constructen
     // Rijbaan_Construct(&ptrRijbaan, licht1 ID, licht2 ID, sensor1 ID, sensor2 ID)
@@ -324,7 +224,7 @@ void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
     //
     (*dptrKruispunt)->illegalEvents=0;
     
-    
+    (*dptrKruispunt)->intTest = 444;
     
     // Voer actie uit die van Entry Point naar AllesRood zou gaan.
     initialAction(*dptrKruispunt);
@@ -360,8 +260,8 @@ void Kruispunt_PrintAll(Kruispunt *ptrKruispunt) {
     Rijbaan_Print(ptrKruispunt->ptrR3);
     printf("\tptrR4: ");
     Rijbaan_Print(ptrKruispunt->ptrR4);
-    printf("\tstatus: ");
-    Kruispunt_PrintStatusLabelInline(ptrKruispunt->status);
+    printf("\tkruispuntStatus: ");
+    Kruispunt_PrintStatusLabelInline(ptrKruispunt->kruispuntStatus);
     printf("\n");
     printf("\tactieveSet: %d\n", ptrKruispunt->actieveSet);
     printf("\tillegalEvents: %d\n", ptrKruispunt->illegalEvents);
@@ -369,8 +269,8 @@ void Kruispunt_PrintAll(Kruispunt *ptrKruispunt) {
 }
 
 void Kruispunt_PrintState(Kruispunt *ptrKruispunt) {
-    printf("Kruispunt[ status=");
-    Kruispunt_PrintStatusLabelInline(ptrKruispunt->status);
+    printf("Kruispunt[ kruispuntStatus=");
+    Kruispunt_PrintStatusLabelInline(ptrKruispunt->kruispuntStatus);
     printf(", illegalEvents=%d, actieveSet=%d ]\n", 
             ptrKruispunt->illegalEvents,
             ptrKruispunt->actieveSet);

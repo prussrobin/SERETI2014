@@ -8,9 +8,13 @@
 
 static unsigned __stdcall Controller_Task(void* arg){
 	task* t=(task*)arg;
-	Controller *ptrController=(Controller*)(getArgument_task(t));
+	Controller **ptrController1=(Controller**)(getArgument_task(t));
+        Controller *ptrController=(Controller*)ptrController1;
         
         int set = 1;
+        
+        printf("Controller_Task(): ptrController->intTest = %d\n", ptrController->intTest);
+        printf("Controller_Task(): ptrController->ptrKruispunt->intTest = %d\n", ptrController->ptrKruispunt->intTest);
         
         while (!isTerminated_task(t)) {
             
@@ -19,17 +23,20 @@ static unsigned __stdcall Controller_Task(void* arg){
                 Kruispunt_PrintState(ptrController->ptrKruispunt);
             }
             
-            switch(ptrController->ptrKruispunt->status) {
+            switch(ptrController->ptrKruispunt->kruispuntStatus) {
                 case StatusAllesRood:
-                    switch (set++){
+                    switch (set){
                         case 1:
                             Kruispunt_SendEvent(ptrController->ptrKruispunt, EventSet1Groen);
+                            set++;
                             break;
                         case 2:
                             Kruispunt_SendEvent(ptrController->ptrKruispunt, EventSet2Groen);
+                            set++;
                             break;
                         case 3:
                             Kruispunt_SendEvent(ptrController->ptrKruispunt, EventSet3Groen);
+                            set++;
                             break;
                         case 4:
                             Kruispunt_SendEvent(ptrController->ptrKruispunt, EventSet4Groen);
@@ -59,9 +66,11 @@ static unsigned __stdcall Controller_Task(void* arg){
 void Controller_Construct(Controller **dptrController, Kruispunt *ptrKruispunt) {
     (*dptrController)=(Controller*)malloc(sizeof(Controller));
     (*dptrController)->ptrKruispunt=ptrKruispunt;
+    (*dptrController)->intTest = 333;
     
     printf("Controller_Construct(): ");
-    (*dptrController)->ptrKruispunt->status = StatusActieveSetOranje;
+    (*dptrController)->ptrKruispunt->kruispuntStatus = StatusActieveSetOranje;
+    (*dptrController)->ptrKruispunt->actieveSet = 1;
     Kruispunt_PrintAll((*dptrController)->ptrKruispunt);
     
     //Taak creeren en starten voor het kruispunt
