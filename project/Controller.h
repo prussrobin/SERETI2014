@@ -18,7 +18,7 @@ typedef struct {
 } Controller;
 
 
-void Controller_Construct(Controller **dptrController, Kruispunt *ptrKruispunt);
+void Controller_Construct(Controller *ptrController, Kruispunt *ptrKruispunt);
 
 
 #endif	/* CONTROLLER_H */

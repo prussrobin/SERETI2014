@@ -17,7 +17,7 @@ typedef struct{
 #define STOPLICHT_ORANJE 2
 #define STOPLICHT_ROOD 3
 
-void Stoplicht_Construct(Stoplicht** ptrStoplicht, int Stoplicht_ID, int Stoplicht_State);
+void Stoplicht_Construct(Stoplicht* ptrStoplicht, int Stoplicht_ID, int Stoplicht_State);
 void Stoplicht_Set_State(Stoplicht *obj, int state);
 int Stoplicht_Get_State(Stoplicht *obj);
 

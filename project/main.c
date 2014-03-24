@@ -20,15 +20,15 @@ int main_thijs(int argc, char** argv) {
     //Rijbaan_Construct(&R1, 1, 2, 1, 2);
     //Rijbaan_Print(R1);
     
-    Kruispunt *ptrKruispunt;
-    Kruispunt_Construct(&ptrKruispunt);
+    Kruispunt *ptrKruispunt=(Kruispunt*)malloc(sizeof(Kruispunt));
+    Kruispunt_Construct(ptrKruispunt);
     
     sleep(1);
     
     Kruispunt_PrintAll(ptrKruispunt);
     
-    Controller *ptrController;
-    Controller_Construct(&ptrController, ptrKruispunt);
+    Controller *ptrController=(Controller*)malloc(sizeof(Controller));
+    Controller_Construct(ptrController, ptrKruispunt);
     
     sleep(3);
     
@@ -45,7 +45,7 @@ int main_robin(int argc, char** argv) {
     //Rijbaan_Print(R1);
     
     Kruispunt *ptrKruispunt=NULL;
-    Kruispunt_Construct(&ptrKruispunt);
+    Kruispunt_Construct(ptrKruispunt);
     
     Kruispunt_SendEvent(ptrKruispunt,EventNoodStopUit);
     

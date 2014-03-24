@@ -201,42 +201,43 @@ static unsigned __stdcall Kruispunt_Task(void* arg){
 
 
 
-void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
+void Kruispunt_Construct(Kruispunt *ptrKruispunt) {
     // STD bouwen.
     construct_kruispuntSTD();
     
-    // Reserveer geheugen voor de Kruispunt struct
-    (*dptrKruispunt)=(Kruispunt*)malloc(sizeof(Kruispunt));
-    
     // Initieele status
-    (*dptrKruispunt)->kruispuntStatus=StatusAllesRood;
+    ptrKruispunt->kruispuntStatus=StatusAllesRood;
     
     // Rijbanen constructen
+    ptrKruispunt->ptrR1=(Rijbaan*)malloc(sizeof(Rijbaan));
+    ptrKruispunt->ptrR2=(Rijbaan*)malloc(sizeof(Rijbaan));
+    ptrKruispunt->ptrR3=(Rijbaan*)malloc(sizeof(Rijbaan));
+    ptrKruispunt->ptrR4=(Rijbaan*)malloc(sizeof(Rijbaan));
     // Rijbaan_Construct(&ptrRijbaan, licht1 ID, licht2 ID, sensor1 ID, sensor2 ID)
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR1, 10, 11, 10, 11); //, 12, 13);
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR2, 20, 21, 20, 21); //, 22, 23);
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR3, 30, 31, 30, 31); //, 32, 33);
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR4, 40, 41, 40, 41); //, 42, 43);
+    Rijbaan_Construct(ptrKruispunt->ptrR1, 10, 11, 10, 11); //, 12, 13);
+    Rijbaan_Construct(ptrKruispunt->ptrR2, 20, 21, 20, 21); //, 22, 23);
+    Rijbaan_Construct(ptrKruispunt->ptrR3, 30, 31, 30, 31); //, 32, 33);
+    Rijbaan_Construct(ptrKruispunt->ptrR4, 40, 41, 40, 41); //, 42, 43);
     
     // Alles staat op rood, dus geen set actief.
-    (*dptrKruispunt)->actieveSet=GEEN_SET;
+    ptrKruispunt->actieveSet=GEEN_SET;
     
     //
-    (*dptrKruispunt)->illegalEvents=0;
+    ptrKruispunt->illegalEvents=0;
     
-    (*dptrKruispunt)->intTest = 444;
+    ptrKruispunt->intTest = 444;
     
     // Voer actie uit die van Entry Point naar AllesRood zou gaan.
-    initialAction(*dptrKruispunt);
+    initialAction(ptrKruispunt);
     
     
     
     //Mailbox aanmaken, waar 10 berichten in passen
-    create_mailBox(&((*dptrKruispunt)->mailbox),10,sizeof(KruispuntEvent));
+    create_mailBox(&(ptrKruispunt->mailbox),10,sizeof(KruispuntEvent));
 
     //Taak creeren en starten voor het kruispunt
-    (*dptrKruispunt)->ptrTask=(task*)malloc(sizeof(task));
-    create_task((*dptrKruispunt)->ptrTask,Kruispunt_Task,*dptrKruispunt,sizeof(Kruispunt),0);
+    ptrKruispunt->ptrTask=(task*)malloc(sizeof(task));
+    create_task(ptrKruispunt->ptrTask,Kruispunt_Task,ptrKruispunt,sizeof(Kruispunt),0);
 }
 
 void Kruispunt_SendEvent(Kruispunt *ptrKruispunt, KruispuntEvent e) {

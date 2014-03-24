@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #include "Stoplicht.h"
 
-void Stoplicht_Construct(Stoplicht** ptrStoplicht, int Stoplicht_ID, int Stoplicht_State){
-    (*ptrStoplicht)=(Stoplicht*)malloc(sizeof(Stoplicht));
-    (*ptrStoplicht)->ID = Stoplicht_ID;
-    Stoplicht_Set_State(*ptrStoplicht, Stoplicht_State);
+void Stoplicht_Construct(Stoplicht* ptrStoplicht, int Stoplicht_ID, int Stoplicht_State){
+    ptrStoplicht->ID = Stoplicht_ID;
+    Stoplicht_Set_State(ptrStoplicht, Stoplicht_State);
 }
 
 void Stoplicht_Set_State(Stoplicht *obj, int state){

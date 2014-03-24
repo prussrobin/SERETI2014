@@ -16,7 +16,7 @@ typedef struct{
     Stoplicht *ptrSLl;
 }Rijbaan;
 
-void Rijbaan_Construct(Rijbaan** ptrRijbaan, int SLrr_ID, int SLl_ID, int Sensor_ID1, int Sensor_ID2);
+void Rijbaan_Construct(Rijbaan* ptrRijbaan, int SLrr_ID, int SLl_ID, int Sensor_ID1, int Sensor_ID2);
 void Rijbaan_Print();
 
 #endif	/* RIJBAAN_H */

@@ -63,17 +63,16 @@ static unsigned __stdcall Controller_Task(void* arg){
         return 0;
 }
 
-void Controller_Construct(Controller **dptrController, Kruispunt *ptrKruispunt) {
-    (*dptrController)=(Controller*)malloc(sizeof(Controller));
-    (*dptrController)->ptrKruispunt=ptrKruispunt;
-    (*dptrController)->intTest = 333;
+void Controller_Construct(Controller *ptrController, Kruispunt *ptrKruispunt) {
+    ptrController->ptrKruispunt=ptrKruispunt;
+    ptrController->intTest = 333;
     
     printf("Controller_Construct(): ");
-    (*dptrController)->ptrKruispunt->kruispuntStatus = StatusActieveSetOranje;
-    (*dptrController)->ptrKruispunt->actieveSet = 1;
-    Kruispunt_PrintAll((*dptrController)->ptrKruispunt);
+    ptrController->ptrKruispunt->kruispuntStatus = StatusActieveSetOranje;
+    ptrController->ptrKruispunt->actieveSet = 1;
+    Kruispunt_PrintAll(ptrController->ptrKruispunt);
     
     //Taak creeren en starten voor het kruispunt
-    (*dptrController)->ptrTask=(task*)malloc(sizeof(task));
-    create_task((*dptrController)->ptrTask,Controller_Task,*dptrController,sizeof(Controller),0);
+    ptrController->ptrTask=(task*)malloc(sizeof(task));
+    create_task(ptrController->ptrTask,Controller_Task,ptrController,sizeof(Controller),0);
 }
