@@ -318,11 +318,18 @@ void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
     Rijbaan_Construct(&(*dptrKruispunt)->ptrR3, 30, 31, 30, 31); //, 32, 33);
     Rijbaan_Construct(&(*dptrKruispunt)->ptrR4, 40, 41, 40, 41); //, 42, 43);
     
-    // In den beginne was er nog geen set actief.
+    // Alles staat op rood, dus geen set actief.
     (*dptrKruispunt)->actieveSet=GEEN_SET;
     
     //
     (*dptrKruispunt)->illegalEvents=0;
+    
+    
+    
+    // Voer actie uit die van Entry Point naar AllesRood zou gaan.
+    initialAction(*dptrKruispunt);
+    
+    
     
     //Mailbox aanmaken, waar 10 berichten in passen
     create_mailBox(&((*dptrKruispunt)->mailbox),10,sizeof(KruispuntEvent));
@@ -330,9 +337,6 @@ void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
     //Taak creeren en starten voor het kruispunt
     (*dptrKruispunt)->ptrTask=(task*)malloc(sizeof(task));
     create_task((*dptrKruispunt)->ptrTask,Kruispunt_Task,*dptrKruispunt,sizeof(Kruispunt),0);
-    
-    // Voer actie uit die van Entry Point naar AllesRood zou gaan.
-    initialAction(*dptrKruispunt);
 }
 
 void Kruispunt_SendEvent(Kruispunt *ptrKruispunt, KruispuntEvent e) {
@@ -356,7 +360,9 @@ void Kruispunt_PrintAll(Kruispunt *ptrKruispunt) {
     Rijbaan_Print(ptrKruispunt->ptrR3);
     printf("\tptrR4: ");
     Rijbaan_Print(ptrKruispunt->ptrR4);
-    printf("\tstatus: %d\n", ptrKruispunt->illegalEvents);
+    printf("\tstatus: ");
+    Kruispunt_PrintStatusLabelInline(ptrKruispunt->status);
+    printf("\n");
     printf("\tactieveSet: %d\n", ptrKruispunt->actieveSet);
     printf("\tillegalEvents: %d\n", ptrKruispunt->illegalEvents);
     printf("]\n");
@@ -390,11 +396,11 @@ void Kruispunt_PrintEventLabelInline(KruispuntEvent e) {
         case EventSet4Groen:
             printf("EventSet4Groen");
             break;
-        case EventGroenNaarOranje:
-            printf("EventGroenNaarOranje");
+        case EventOranje:
+            printf("EventOranje");
             break;
-        case EventOranjeNaarRood:
-            printf("EventOranjeNaarRood");
+        case EventRood:
+            printf("EventRood");
             break;
         default:
             printf("unknown");

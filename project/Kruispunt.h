@@ -59,6 +59,10 @@ typedef struct {
 
 void Kruispunt_Construct(Kruispunt **dptrKruispunt);
 void Kruispunt_SendEvent(Kruispunt* ptrKruispunt,KruispuntEvent e);
+
+/*
+ * Print functies. Voor debug purposes.
+ */
 void Kruispunt_PrintAll(Kruispunt *ptrKruispunt);
 void Kruispunt_PrintState(Kruispunt *ptrKruispunt);
 void Kruispunt_PrintEventLabelInline(KruispuntEvent e);

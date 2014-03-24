@@ -11,6 +11,8 @@
 #include "Stoplicht.h"
 #include "ntk.h"
 #include "Kruispunt.h"
+#include "Controller.h"
+
 /*
  * 
  */
@@ -20,33 +22,17 @@ int main(int argc, char** argv) {
     //Rijbaan_Construct(&R1, 1, 2, 1, 2);
     //Rijbaan_Print(R1);
     
-    Kruispunt *ptrKruispunt=NULL;
+    Kruispunt *ptrKruispunt;
     Kruispunt_Construct(&ptrKruispunt);
     
-    Kruispunt_SendEvent(ptrKruispunt,EventNoodStopUit);
-    
     sleep(1);
     
-    Kruispunt_SendEvent(ptrKruispunt,EventSet1Groen);
+    Kruispunt_PrintAll(ptrKruispunt);
     
-    sleep(1);
+    Controller *ptrController;
+    Controller_Construct(&ptrController, ptrKruispunt);
     
-    Kruispunt_SendEvent(ptrKruispunt,EventNoodStopAan);
-    
-    sleep(1);
-    
-    Kruispunt_SendEvent(ptrKruispunt,EventGroenNaarOranje);
-    
-    sleep(1);
-    
-    Kruispunt_SendEvent(ptrKruispunt,EventOranjeNaarRood);
-    
-    sleep(1);
-    
-    Kruispunt_SendEvent(ptrKruispunt,EventNoodStopAan);
-    
-    sleep(1);
-    
+    sleep(3);
     
     return (EXIT_SUCCESS);
 }
