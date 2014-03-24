@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Controller.h</itemPath>
       <itemPath>Counter.h</itemPath>
       <itemPath>Kruispunt.h</itemPath>
       <itemPath>Rijbaan.h</itemPath>
@@ -20,6 +21,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Controller.c</itemPath>
       <itemPath>Counter.c</itemPath>
       <itemPath>Kruispunt.c</itemPath>
       <itemPath>Rijbaan.c</itemPath>
@@ -52,6 +54,10 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="Controller.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Controller.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Counter.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Counter.h" ex="false" tool="3" flavor2="0">
@@ -101,6 +107,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Controller.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="Controller.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Counter.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="Counter.h" ex="false" tool="3" flavor2="0">

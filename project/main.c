@@ -1,3 +1,4 @@
+
 /* 
  * File:   main.c
  * Author: Robin
@@ -11,10 +12,32 @@
 #include "Stoplicht.h"
 #include "ntk.h"
 #include "Kruispunt.h"
-/*
- * 
- */
-int main(int argc, char** argv) {
+#include "Controller.h"
+
+int main_thijs(int argc, char** argv) {
+    //Rijbaan *R1;
+    //Rijbaan_Construct(&R1, 1, 2, 1, 2);
+    //Rijbaan_Print(R1);
+    
+    Kruispunt *ptrKruispunt;
+    Kruispunt_Construct(&ptrKruispunt);
+    
+    sleep(1);
+    
+    Kruispunt_PrintAll(ptrKruispunt);
+    
+    Controller *ptrController;
+    Controller_Construct(&ptrController, ptrKruispunt);
+    
+    sleep(3);
+    
+    return (EXIT_SUCCESS);
+}
+        
+        
+
+
+int main_robin(int argc, char** argv) {
     
     //Rijbaan *R1;
     //Rijbaan_Construct(&R1, 1, 2, 1, 2);
@@ -35,11 +58,11 @@ int main(int argc, char** argv) {
     
     sleep(1);
     
-    Kruispunt_SendEvent(ptrKruispunt,EventGroenNaarOranje);
+    Kruispunt_SendEvent(ptrKruispunt,EventOranje);
     
     sleep(1);
     
-    Kruispunt_SendEvent(ptrKruispunt,EventOranjeNaarRood);
+    Kruispunt_SendEvent(ptrKruispunt,EventRood);
     
     sleep(1);
     
@@ -51,3 +74,10 @@ int main(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
+
+/*
+ * 
+ */
+int main(int argc, char** argv) {
+    return main_thijs(argc, argv);
+}

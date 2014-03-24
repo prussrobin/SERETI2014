@@ -193,7 +193,7 @@ static void construct_kruispuntSTD() {
         addTransition_STD(
                 kruispuntSTD, 
                 StatusActieveSetGroen, 
-                EventGroenNaarOranje, 
+                EventOranje, 
                 StatusActieveSetOranje, 
                 actionGroenNaarOranje);
         
@@ -220,7 +220,7 @@ static void construct_kruispuntSTD() {
         addTransition_STD(
                 kruispuntSTD, 
                 StatusActieveSetOranje, 
-                EventOranjeNaarRood, 
+                EventRood, 
                 StatusAllesRood, 
                 actionOranjeNaarRood);
         
@@ -313,16 +313,23 @@ void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
     
     // Rijbanen constructen
     // Rijbaan_Construct(&ptrRijbaan, licht1 ID, licht2 ID, sensor1 ID, sensor2 ID)
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR1, 1, 2, 0, 0);
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR2, 3, 4, 0, 0);
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR3, 5, 6, 0, 0);
-    Rijbaan_Construct(&(*dptrKruispunt)->ptrR4, 7, 8, 0, 0);
+    Rijbaan_Construct(&(*dptrKruispunt)->ptrR1, 10, 11, 10, 11); //, 12, 13);
+    Rijbaan_Construct(&(*dptrKruispunt)->ptrR2, 20, 21, 20, 21); //, 22, 23);
+    Rijbaan_Construct(&(*dptrKruispunt)->ptrR3, 30, 31, 30, 31); //, 32, 33);
+    Rijbaan_Construct(&(*dptrKruispunt)->ptrR4, 40, 41, 40, 41); //, 42, 43);
     
-    // In den beginne was er nog geen set actief.
+    // Alles staat op rood, dus geen set actief.
     (*dptrKruispunt)->actieveSet=GEEN_SET;
     
     //
     (*dptrKruispunt)->illegalEvents=0;
+    
+    
+    
+    // Voer actie uit die van Entry Point naar AllesRood zou gaan.
+    initialAction(*dptrKruispunt);
+    
+    
     
     //Mailbox aanmaken, waar 10 berichten in passen
     create_mailBox(&((*dptrKruispunt)->mailbox),10,sizeof(KruispuntEvent));
@@ -330,9 +337,6 @@ void Kruispunt_Construct(Kruispunt **dptrKruispunt) {
     //Taak creeren en starten voor het kruispunt
     (*dptrKruispunt)->ptrTask=(task*)malloc(sizeof(task));
     create_task((*dptrKruispunt)->ptrTask,Kruispunt_Task,*dptrKruispunt,sizeof(Kruispunt),0);
-    
-    // Voer actie uit die van Entry Point naar AllesRood zou gaan.
-    initialAction(*dptrKruispunt);
 }
 
 void Kruispunt_SendEvent(Kruispunt *ptrKruispunt, KruispuntEvent e) {
@@ -347,6 +351,21 @@ void Kruispunt_SendEvent(Kruispunt *ptrKruispunt, KruispuntEvent e) {
 
 
 void Kruispunt_PrintAll(Kruispunt *ptrKruispunt) {
+    printf("Kruispunt[\n");
+    printf("\tptrR1: ");
+    Rijbaan_Print(ptrKruispunt->ptrR1);
+    printf("\tptrR2: ");
+    Rijbaan_Print(ptrKruispunt->ptrR2);
+    printf("\tptrR3: ");
+    Rijbaan_Print(ptrKruispunt->ptrR3);
+    printf("\tptrR4: ");
+    Rijbaan_Print(ptrKruispunt->ptrR4);
+    printf("\tstatus: ");
+    Kruispunt_PrintStatusLabelInline(ptrKruispunt->status);
+    printf("\n");
+    printf("\tactieveSet: %d\n", ptrKruispunt->actieveSet);
+    printf("\tillegalEvents: %d\n", ptrKruispunt->illegalEvents);
+    printf("]\n");
 }
 
 void Kruispunt_PrintState(Kruispunt *ptrKruispunt) {
@@ -377,11 +396,11 @@ void Kruispunt_PrintEventLabelInline(KruispuntEvent e) {
         case EventSet4Groen:
             printf("EventSet4Groen");
             break;
-        case EventGroenNaarOranje:
-            printf("EventGroenNaarOranje");
+        case EventOranje:
+            printf("EventOranje");
             break;
-        case EventOranjeNaarRood:
-            printf("EventOranjeNaarRood");
+        case EventRood:
+            printf("EventRood");
             break;
         default:
             printf("unknown");
