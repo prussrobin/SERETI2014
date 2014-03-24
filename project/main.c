@@ -75,15 +75,19 @@ int main_robin(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
+void derp() {
+    printf("derp\n");
+}
+
 int main_timertest(int argc, char** argv) {
     
     Timer *t=(Timer*)malloc(sizeof(Timer));
     Timer_Construct(t);
     
-    Timer_Start(t,1000);
-    Timer_Start(t,1000);
+    Timer_Start(t,*derp,1000);
+    Timer_Start(t,*derp,1000);
     Timer_Stop(t);
-    Timer_Start(t,2000);
+    Timer_Start(t,*derp,2000);
     
     //wait_event(ptrEventDone);
     sleep(4);

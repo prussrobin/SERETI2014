@@ -19,7 +19,7 @@ typedef struct {
 } Timer;
 
 void Timer_Construct(Timer *ptrTimer);
-void Timer_Start(Timer *ptrTimer, unsigned long milliseconds);
+void Timer_Start(Timer *ptrTimer, void (*action)(), unsigned long milliseconds);
 void Timer_Stop(Timer *ptrTimer);
 
 #endif	/* TIMER_H */
