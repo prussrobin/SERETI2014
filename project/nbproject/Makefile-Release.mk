@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Rijbaan.o \
 	${OBJECTDIR}/Sensor.o \
 	${OBJECTDIR}/Stoplicht.o \
+	${OBJECTDIR}/Timer.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/ntk.o
 
@@ -98,6 +99,11 @@ ${OBJECTDIR}/Stoplicht.o: Stoplicht.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Stoplicht.o Stoplicht.c
+
+${OBJECTDIR}/Timer.o: Timer.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Timer.o Timer.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}

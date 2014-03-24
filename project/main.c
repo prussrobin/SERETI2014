@@ -13,6 +13,7 @@
 #include "ntk.h"
 #include "Kruispunt.h"
 #include "Controller.h"
+#include "Timer.h"
 
 int main_thijs(int argc, char** argv) {
     //Rijbaan *R1;
@@ -74,10 +75,26 @@ int main_robin(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
+int main_timertest(int argc, char** argv) {
+    
+    Timer *t=(Timer*)malloc(sizeof(Timer));
+    Timer_Construct(t);
+    
+    Timer_Start(t,1000);
+    Timer_Start(t,1000);
+    Timer_Stop(t);
+    Timer_Start(t,2000);
+    
+    //wait_event(ptrEventDone);
+    sleep(4);
+    
+    return (EXIT_SUCCESS);
+}
+
 
 /*
  * 
  */
 int main(int argc, char** argv) {
-    return main_thijs(argc, argv);
+    return main_timertest(argc, argv);
 }

@@ -162,7 +162,7 @@ static void construct_kruispuntSTD() {
 
 
 
-//Taak voor het vat object
+//Taak voor het Kruispunt object
 static unsigned __stdcall Kruispunt_Task(void* arg){
 	task* t=(task*)arg;
 	Kruispunt *ptrKruispunt=(Kruispunt*)(getArgument_task(t));
