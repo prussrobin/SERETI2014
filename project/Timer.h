@@ -10,9 +10,6 @@
 
 #include "ntk.h"
 
-#define TIMER_START 1
-#define TIMER_STOP 2
-
 typedef struct {
     task *ptrTask;
     mailBox mailbox;

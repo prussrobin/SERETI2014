@@ -3,7 +3,10 @@
 #include "ntk.h"
 #include "Timer.h"
 
-#define TIMER_DEBUG 1
+#define TIMER_START 1
+#define TIMER_STOP 2
+
+#define TIMER_DEBUG 0
 
 struct TimerMessage {
     int timer_state;
@@ -39,50 +42,57 @@ static unsigned __stdcall Timer_Task(void* arg){
         
 	//Zolang het kruispunt nog bestaat, zal deze taak actief blijven
 	while(!isTerminated_task(t)) {
+            
             nextMsg=(struct TimerMessage*)malloc(sizeof(struct TimerMessage));
             
             if (TIMER_DEBUG) {
                 printf("Timer_Task(): use ");
                 Timer_PrintMsg(msg);
             }
+            
             if (msg==NULL||msg->timer_state==TIMER_STOP) {
-                if (TIMER_DEBUG){
-                        printf("Timer_Task(): get_mailBox()...\n");
-                }
+                
+                if (TIMER_DEBUG) printf("Timer_Task(): get_mailBox()...\n");
+                
                 get_mailBox(&(ptrTimer->mailbox),nextMsg);
-                printf("Timer_Task(): received ");
-                Timer_PrintMsg(nextMsg);
+                
+                if (TIMER_DEBUG) {      printf("Timer_Task(): received ");
+                                        Timer_PrintMsg(nextMsg); }
+                
                 free(msg);
                 msg=nextMsg;
+                
             } else {
-                if (TIMER_DEBUG){
-                        printf("Timer_Task(): getTimed_mailBox()...\n");
-                }
+                
+                if (TIMER_DEBUG) printf("Timer_Task(): getTimed_mailBox()...\n");
+                
                 if (getTimed_mailBox(&(ptrTimer->mailbox),nextMsg,msg->milliseconds)==WAIT_TIMEOUT){
                     
                     // perform timed action
                     msg->action();
                     
-                    if (TIMER_DEBUG) {
-                        printf("Timer_Task(): timer done after %u ms!\n", msg->milliseconds);
-                    }
+                    if (TIMER_DEBUG) printf("Timer_Task(): timer done after %u ms!\n", msg->milliseconds);
+                    
                     free(msg);
+                    
                     nextMsg=(struct TimerMessage*)malloc(sizeof(struct TimerMessage));
                     nextMsg->action=NULL;
                     nextMsg->timer_state=TIMER_STOP;
                     nextMsg->milliseconds=0;
                     msg=nextMsg;
+                    
                 } else {
-                    if (TIMER_DEBUG){
-                        printf("Timer_Task(): timer stopped, received ");
-                        Timer_PrintMsg(nextMsg);
-                    }
+                    
+                    if (TIMER_DEBUG){   printf("Timer_Task(): timer stopped, received ");
+                                        Timer_PrintMsg(nextMsg); }
+                    
                     free(msg);
+                    
                     msg=nextMsg;
                 }
             }
             
-            printf("\n");
+            if (TIMER_DEBUG) printf("\n");
 	}
 
 	return 0;
