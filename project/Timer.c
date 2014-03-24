@@ -11,6 +11,7 @@
 struct TimerMessage {
     int timer_state;
     void (*action)();
+    void *arg;
     unsigned long milliseconds;
 };
 
@@ -18,7 +19,7 @@ void Timer_PrintMsg(struct TimerMessage *msg) {
     if (msg==NULL) {
         printf("msgNULL\n");
     } else {
-        printf("msg@%d[timer_state=", msg);
+        printf("msg@%d[action@%d, arg@%d, timer_state=", msg->action, msg->arg, msg);
         switch(msg->timer_state){
             case TIMER_START:
                 printf("TIMER_START");
@@ -69,7 +70,7 @@ static unsigned __stdcall Timer_Task(void* arg){
                 if (getTimed_mailBox(&(ptrTimer->mailbox),nextMsg,msg->milliseconds)==WAIT_TIMEOUT){
                     
                     // perform timed action
-                    msg->action();
+                    msg->action(msg->arg);
                     
                     if (TIMER_DEBUG) printf("Timer_Task(): timer done after %u ms!\n", msg->milliseconds);
                     
@@ -108,9 +109,10 @@ void Timer_Construct(Timer *ptrTimer) {
     create_task(ptrTimer->ptrTask,Timer_Task,ptrTimer,sizeof(Timer),0);
 }
 
-void Timer_Start(Timer *ptrTimer, void (*action)(), unsigned long milliseconds) {
+void Timer_Start(Timer *ptrTimer, void (*action)(void*), void *arg, unsigned long milliseconds) {
     struct TimerMessage *ptrMsg=(struct TimerMessage*)malloc(sizeof(struct TimerMessage));
     ptrMsg->action=action;
+    ptrMsg->arg=arg;
     ptrMsg->timer_state=TIMER_START;
     ptrMsg->milliseconds=milliseconds;
     put_mailBox(&(ptrTimer->mailbox),ptrMsg);
@@ -119,6 +121,7 @@ void Timer_Start(Timer *ptrTimer, void (*action)(), unsigned long milliseconds) 
 void Timer_Stop(Timer *ptrTimer) {
     struct TimerMessage *ptrMsg=(struct TimerMessage*)malloc(sizeof(struct TimerMessage));
     ptrMsg->action=NULL;
+    ptrMsg->arg=NULL;
     ptrMsg->timer_state=TIMER_STOP;
     ptrMsg->milliseconds=0;
     put_mailBox(&(ptrTimer->mailbox),ptrMsg);

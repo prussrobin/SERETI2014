@@ -14,6 +14,7 @@
 #include "Rijbaan.h"
 #include "Sensor.h"
 #include "Stoplicht.h"
+#include "Timer.h"
 
 
 #define KRUISPUNT_AANTAL_TOESTANDEN 5
@@ -54,6 +55,7 @@ typedef struct {
     int illegalEvents;
     task *ptrTask;
     mailBox mailbox;
+    Timer *ptrTimer;
     
     int intTest;
 } Kruispunt;
@@ -61,6 +63,7 @@ typedef struct {
 
 void Kruispunt_Construct(Kruispunt *ptrKruispunt);
 void Kruispunt_SendEvent(Kruispunt *ptrKruispunt,KruispuntEvent e);
+void Kruispunt_SendVolgendeSetGroenEvent(Kruispunt *ptrKruispunt);
 
 /*
  * Print functies. Voor debug purposes.

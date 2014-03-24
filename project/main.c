@@ -15,6 +15,10 @@
 #include "Controller.h"
 #include "Timer.h"
 
+event *eventQuit;
+
+
+
 int main_thijs(int argc, char** argv) {
     //Rijbaan *R1;
     //Rijbaan_Construct(&R1, 1, 2, 1, 2);
@@ -34,10 +38,7 @@ int main_thijs(int argc, char** argv) {
     
     return (EXIT_SUCCESS);
 }
-        
-        
-
-
+      
 int main_robin(int argc, char** argv) {
     
     //Rijbaan *R1;
@@ -75,7 +76,7 @@ int main_robin(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
-void derp() {
+void testTimerAction(void *obj) {
     printf("derp\n");
 }
 
@@ -84,10 +85,10 @@ int main_timertest(int argc, char** argv) {
     Timer *t=(Timer*)malloc(sizeof(Timer));
     Timer_Construct(t);
     
-    Timer_Start(t,*derp,1000);
-    Timer_Start(t,*derp,1000);
+    Timer_Start(t,*testTimerAction,NULL,1000);
+    Timer_Start(t,*testTimerAction,NULL,1000);
     Timer_Stop(t);
-    Timer_Start(t,*derp,2000);
+    Timer_Start(t,*testTimerAction,NULL,2000);
     
     //wait_event(ptrEventDone);
     sleep(4);
@@ -100,5 +101,19 @@ int main_timertest(int argc, char** argv) {
  * 
  */
 int main(int argc, char** argv) {
-    return main_timertest(argc, argv);
+    //eventQuit=(event*)malloc(sizeof(event));
+    //create_event(eventQuit,1);
+    
+    Kruispunt *k=malloc(sizeof(Kruispunt));
+    Kruispunt_Construct(k);
+    
+    /*
+     * "block"  de main thread, terwijl Kruispunt_Task z'n ding doet.
+     * Heb while(1); geprobeerd, en wait_event(eventQuit); maar netbeans
+     * vindt dat niet zo leuk. Dus dan maar sleep(groooootgetalll); 
+     */
+    sleep(60*5);
+    
+    //return main_timertest(argc, argv);
+    return (EXIT_SUCCESS);
 }

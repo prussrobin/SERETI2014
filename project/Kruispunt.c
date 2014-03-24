@@ -3,10 +3,55 @@
 #include "ntk.h"
 #include "Kruispunt.h"
 
+#define TIMER_GROEN_TIJD 1000
+#define TIMER_ORANJE_TIJD 1000
+#define TIMER_ROOD_TIJD 1000
+
+
 #define KRUISPUNT_DEBUG 1
 
 
 static STD *kruispuntSTD=NULL;
+
+
+/* wordt gebruikt door Kruispunt_SendVolgendeSetGroenEvent();
+ */
+static int setAanDeBeurt=1;
+
+
+
+static void eventTimerGroenKlaar(void *obj) {
+    Kruispunt *k=(Kruispunt*)obj;
+    if (KRUISPUNT_DEBUG) printf("Kruispunt.c:eventTimerGroen(): \n");
+    Kruispunt_SendEvent(k,EventOranje);
+}
+
+static void eventTimerOranjeKlaar(void *obj) {
+    Kruispunt *k=(Kruispunt*)obj;
+    if (KRUISPUNT_DEBUG) printf("Kruispunt.c:eventTimerOranje(): \n");
+    Kruispunt_SendEvent(k,EventRood);
+}
+
+static void eventTimerRoodKlaar(void *obj) {
+    Kruispunt *k=(Kruispunt*)obj;
+    if (KRUISPUNT_DEBUG) printf("Kruispunt.c:eventTimerRood(): \n");
+    Kruispunt_SendVolgendeSetGroenEvent(k);
+}
+
+
+
+static void startGroenTimer(Kruispunt *k) {
+    Timer_Start(k->ptrTimer,eventTimerGroenKlaar,k,TIMER_GROEN_TIJD);
+}
+
+static void startOranjeTimer(Kruispunt *k) {
+    Timer_Start(k->ptrTimer,eventTimerOranjeKlaar,k,TIMER_ORANJE_TIJD);
+}
+
+static void startRoodTimer(Kruispunt *k) {
+    Timer_Start(k->ptrTimer,eventTimerRoodKlaar,k,TIMER_ROOD_TIJD);
+}
+
 
 
 static void initialAction(void *obj) {
@@ -14,6 +59,7 @@ static void initialAction(void *obj) {
     if (KRUISPUNT_DEBUG) {
         printf("Kruispunt.c:initalAction: \n");
     }
+    Kruispunt_SendVolgendeSetGroenEvent(ptrKruispunt);
 }
 
 
@@ -24,6 +70,7 @@ static void actionSet1Groen(void *obj) {
         printf("Kruispunt.c:actionSet1Groen: \n");
     }
     ptrKruispunt->actieveSet=1;
+    startGroenTimer(ptrKruispunt);
 }
 
 static void actionSet2Groen(void *obj) {
@@ -32,6 +79,7 @@ static void actionSet2Groen(void *obj) {
         printf("Kruispunt.c:actionSet2Groen: \n");
     }
     ptrKruispunt->actieveSet=2;
+    startGroenTimer(ptrKruispunt);
 }
 
 static void actionSet3Groen(void *obj) {
@@ -40,6 +88,7 @@ static void actionSet3Groen(void *obj) {
         printf("Kruispunt.c:actionSet3Groen: \n");
     }
     ptrKruispunt->actieveSet=3;
+    startGroenTimer(ptrKruispunt);
 }
 
 static void actionSet4Groen(void *obj) {
@@ -48,6 +97,7 @@ static void actionSet4Groen(void *obj) {
         printf("Kruispunt.c:actionSet4Groen: \n");
     }
     ptrKruispunt->actieveSet=4;
+    startGroenTimer(ptrKruispunt);
 }
 
 
@@ -57,6 +107,7 @@ static void actionGroenNaarOranje(void *obj) {
     if (KRUISPUNT_DEBUG) {
         printf("Kruispunt.c:actionGroenNaarOranje: \n");
     }
+    startOranjeTimer(ptrKruispunt);
 }
 
 
@@ -67,6 +118,7 @@ static void actionOranjeNaarRood(void *obj) {
         printf("Kruispunt.c:actionOranjeNaarRood: \n");
     }
     ptrKruispunt->actieveSet=GEEN_SET;
+    startRoodTimer(ptrKruispunt);
 }
 
 
@@ -76,6 +128,7 @@ static void actionGroenNaarNoodStopOranje(void *obj) {
     if (KRUISPUNT_DEBUG) {
         printf("Kruispunt.c:actionGroenNaarNoodStopOranje: \n");
     }
+    startOranjeTimer(ptrKruispunt);
 }
 
 static void actionOranjeNaarNoodStopOranje(void *obj) {
@@ -83,6 +136,7 @@ static void actionOranjeNaarNoodStopOranje(void *obj) {
     if (KRUISPUNT_DEBUG) {
         printf("Kruispunt.c:actionOranjeNaarNoodStopOranje: \n");
     }
+    // Oranje timer draait nog, lekker laten draaien
 }
 
 
@@ -110,6 +164,7 @@ static void actionVervolgRegulier(void *obj) {
     if (KRUISPUNT_DEBUG) {
         printf("Kruispunt.c:actionVervolgRegulier: \n");
     }
+    Kruispunt_SendVolgendeSetGroenEvent(ptrKruispunt);
 }
 
 
@@ -183,13 +238,14 @@ static unsigned __stdcall Kruispunt_Task(void* arg){
             //Zoek de status op en voer de juiste actie uit.
 
             //<NIEUWE TOESTAND> = lookUp_STD(<VERWIJZING NAAR STD>, <HUIDIGE TOESTAND>, <GEBEURTENIS>, <WELKE ACTIE?>)
-            ptrKruispunt->kruispuntStatus = (KruispuntStatus)lookUp_STD(kruispuntSTD,ptrKruispunt->kruispuntStatus,e,&a);
+            ptrKruispunt->kruispuntStatus = 
+                    (KruispuntStatus)lookUp_STD(kruispuntSTD,(int)ptrKruispunt->kruispuntStatus,e,&a);
             
             //Voer actie uit
             a(ptrKruispunt);
             
             if (KRUISPUNT_DEBUG) {
-                printf("Kruispunt_Task: ");
+                printf("Kruispunt_Task: hudige status ");
                 Kruispunt_PrintState(ptrKruispunt);
                 printf("\n");
             }
@@ -227,9 +283,11 @@ void Kruispunt_Construct(Kruispunt *ptrKruispunt) {
     
     ptrKruispunt->intTest = 444;
     
-    // Voer actie uit die van Entry Point naar AllesRood zou gaan.
-    initialAction(ptrKruispunt);
     
+    
+    // Timer aanmaken.
+    ptrKruispunt->ptrTimer=(Timer*)malloc(sizeof(Timer));
+    Timer_Construct(ptrKruispunt->ptrTimer);
     
     
     //Mailbox aanmaken, waar 10 berichten in passen
@@ -238,16 +296,45 @@ void Kruispunt_Construct(Kruispunt *ptrKruispunt) {
     //Taak creeren en starten voor het kruispunt
     ptrKruispunt->ptrTask=(task*)malloc(sizeof(task));
     create_task(ptrKruispunt->ptrTask,Kruispunt_Task,ptrKruispunt,sizeof(Kruispunt),0);
+    
+    
+    
+    
+    // Voer actie uit die van Entry Point naar AllesRood zou gaan.
+    initialAction(ptrKruispunt);
 }
+
 
 void Kruispunt_SendEvent(Kruispunt *ptrKruispunt, KruispuntEvent e) {
     if (KRUISPUNT_DEBUG) {
-        printf("Kruispunt_SendEvent: put in mailbox (");
+        printf("Kruispunt_SendEvent(");
         Kruispunt_PrintEventLabelInline(e);
         printf(")\n");
     }
-    
     put_mailBox(&(ptrKruispunt->mailbox),&e);
+}
+
+
+void Kruispunt_SendVolgendeSetGroenEvent(Kruispunt *k) {
+    if (KRUISPUNT_DEBUG) printf("Kruispunt_SendVolgendeSetGroenEvent(%d)\n", setAanDeBeurt);
+    
+    switch (setAanDeBeurt) {
+        case 1:
+            Kruispunt_SendEvent(k, EventSet1Groen);
+            break;
+        case 2:
+            Kruispunt_SendEvent(k, EventSet2Groen);
+            break;
+        case 3:
+            Kruispunt_SendEvent(k, EventSet3Groen);
+            break;
+        case 4:
+            Kruispunt_SendEvent(k, EventSet4Groen);
+            break;
+    }
+    
+    // volgende set nummer
+    setAanDeBeurt=(setAanDeBeurt==4)?1:setAanDeBeurt+1;
 }
 
 

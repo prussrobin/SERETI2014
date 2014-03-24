@@ -1,5 +1,5 @@
 build/Debug/Cygwin_4.x-Windows/Controller.o: Controller.c Controller.h \
- ntk.h Kruispunt.h Counter.h Rijbaan.h Stoplicht.h Sensor.h
+ ntk.h Kruispunt.h Counter.h Rijbaan.h Stoplicht.h Sensor.h Timer.h
 
 Controller.h:
 
@@ -14,3 +14,5 @@ Rijbaan.h:
 Stoplicht.h:
 
 Sensor.h:
+
+Timer.h:
